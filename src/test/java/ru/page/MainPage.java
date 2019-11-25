@@ -3,6 +3,7 @@ package ru.page;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedCondition;
@@ -11,10 +12,13 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class MainPage {
     private WebDriver driver;
+    private WebDriverWait wait;
 
     @FindBy(css = ".pFhTbV17qj")
     private WebElement signInButton;
 
+    @FindBy(css = "._3odNv2Dw2n")
+    private WebElement menu;
 
     @FindBy(css = "._2SFylIV5m5 > div:nth-child(2) > span:nth-child(1)")
     private WebElement loginSpan;
@@ -34,6 +38,15 @@ public class MainPage {
     @FindBy(css = "ul.T3jKK6NbAR:nth-child(4) > ul:nth-child(1) > li:nth-child(3) > a:nth-child(1)")
     private WebElement settingsButton;
 
+    @FindBy(css = "._301_b-LBxR button")
+    private WebElement catalog;
+
+    @FindBy(xpath = "//a[contains(@title, 'Красота и гигиена')]")
+    private WebElement beautyAndHygiene;
+
+    @FindBy(xpath = "//a[contains(@title, 'Зубные щетки')]")
+    private WebElement toothBrushes;
+
     private int index = 0;
 
     public MainPage() {
@@ -42,73 +55,79 @@ public class MainPage {
     public MainPage(WebDriver driver) {
         PageFactory.initElements(driver, this);
         this.driver = driver;
+        wait = new WebDriverWait(driver, 10, 100);
     }
 
 
     public LoginPage getLoginPage() {
-        new WebDriverWait(driver, 10, 100)
-                .until(ExpectedConditions.elementToBeClickable(signInButton))
+        wait.until(ExpectedConditions.elementToBeClickable(signInButton))
                 .click();
 
         return new LoginPage(driver);
     }
 
     public String getSignInButtonText() {
-        new WebDriverWait(driver, 10, 100)
-                .until(ExpectedConditions.visibilityOf(signInButton));
+        wait.until(ExpectedConditions.visibilityOf(signInButton));
 
         return signInButton.getText();
     }
 
     public void clickOnMyProfile() {
-        new WebDriverWait(driver, 10, 100)
-                .until(ExpectedConditions.elementToBeClickable(signInButton))
+        wait.until(ExpectedConditions.elementToBeClickable(signInButton))
                 .click();
     }
 
     public boolean isLoginVisible() {
-        new WebDriverWait(driver, 10, 100)
-                .until(ExpectedConditions.visibilityOf(loginSpan));
+        wait.until(ExpectedConditions.visibilityOf(loginSpan));
 
         return loginSpan.isDisplayed();
     }
 
     public SettingsPage clickOnSettings() {
-        new WebDriverWait(driver, 10, 100)
-                .until(ExpectedConditions.elementToBeClickable(settingsButton))
+        wait.until(ExpectedConditions.elementToBeClickable(settingsButton))
                 .click();
 
         return new SettingsPage(driver);
     }
 
+    public void moveCursorOnProfile() {
+        wait.until(ExpectedConditions.and(ExpectedConditions.elementToBeClickable(signInButton),
+                ExpectedConditions.visibilityOf(signInButton)));
+        new Actions(driver).moveToElement(menu).perform();
+        signInButton.click();
+    }
+
     public void changeCity(String city) {
-        new WebDriverWait(driver, 10, 100)
-                .until(ExpectedConditions.elementToBeClickable(citySpan))
+        wait.until(ExpectedConditions.elementToBeClickable(citySpan))
                 .click();
 
-        new WebDriverWait(driver, 10, 100)
-                .until(ExpectedConditions.visibilityOf(cityInputForm))
+        wait.until(ExpectedConditions.visibilityOf(cityInputForm))
                 .sendKeys(Keys.chord(Keys.CONTROL + "a" + Keys.DELETE));
 
-        new WebDriverWait(driver, 10, 100)
-                .until(
-                        (ExpectedCondition<Boolean>) driver -> {
-                            cityInputForm.sendKeys(String.valueOf(city.charAt(index++)));
-                            return cityItem.getText().startsWith(city);
-                        }
-                );
+        wait.until((ExpectedCondition<Boolean>) driver -> {
+            cityInputForm.sendKeys(String.valueOf(city.charAt(index++)));
+            return cityItem.getText().startsWith(city);
+        });
 
         cityItem.click();
 
-        new WebDriverWait(driver, 10, 100)
-                .until(ExpectedConditions.elementToBeClickable(acceptButton))
-                .click();
-
+        wait.until(ExpectedConditions.elementToBeClickable(acceptButton)).click();
     }
 
-    public String getSpanCityText() {
-        new WebDriverWait(driver, 10, 100)
-                .until(ExpectedConditions.elementToBeClickable(citySpan));
+    public void clickOnCatalog() {
+        wait.until(ExpectedConditions.elementToBeClickable(catalog))
+                .click();
+    }
+
+    public BeautyAndHygienePage goToBeautyAndHygienePage() throws InterruptedException {
+        wait.until(ExpectedConditions.elementToBeClickable(beautyAndHygiene)).click();
+
+        return new BeautyAndHygienePage(driver);
+    }
+
+
+    public String getSpanCityText(String city) {
+        wait.until(ExpectedConditions.textToBePresentInElement(citySpan, city));
 
         return citySpan.getText();
     }

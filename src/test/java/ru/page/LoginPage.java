@@ -9,6 +9,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class LoginPage {
     private WebDriver driver;
+    private WebDriverWait wait;
 
     @FindBy(css = "#passp-field-login")
     private WebElement loginForm;
@@ -16,30 +17,26 @@ public class LoginPage {
     private WebElement passwordForm;
     @FindBy(css = "button.button2_theme_action:nth-child(1)")
     private WebElement signInButton;
-//    @FindBy(css = ".1111")
-//    private WebElement test;
 
     public LoginPage(WebDriver driver) {
         PageFactory.initElements(driver, this);
         this.driver = driver;
+        wait = new WebDriverWait(driver, 10);
     }
 
     public MainPage login(String login, String password) {
-        new WebDriverWait(driver, 10, 100)
-                .until(ExpectedConditions.visibilityOf(loginForm))
+        wait.until(ExpectedConditions.visibilityOf(loginForm))
                 .sendKeys(login);
 
-        new WebDriverWait(driver, 10, 100)
-                .until(ExpectedConditions.elementToBeClickable(signInButton))
+        wait.until(ExpectedConditions.elementToBeClickable(signInButton))
                 .click();
 
-        new WebDriverWait(driver, 10, 100)
-                .until(ExpectedConditions.visibilityOf(passwordForm))
+        wait.until(ExpectedConditions.visibilityOf(passwordForm))
                 .sendKeys(password);
 
-        new WebDriverWait(driver, 10, 100)
-                .until(ExpectedConditions.elementToBeClickable(signInButton))
+        wait.until(ExpectedConditions.elementToBeClickable(signInButton))
                 .click();
+
         return new MainPage(driver);
     }
 }

@@ -9,6 +9,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class SettingsPage {
     private WebDriver driver;
+    private WebDriverWait wait;
 
     @FindBy(css = "span._3ioN70chUh > span:nth-child(1)")
     private WebElement myCity;
@@ -19,12 +20,11 @@ public class SettingsPage {
     public SettingsPage(WebDriver driver) {
         PageFactory.initElements(driver, this);
         this.driver = driver;
+        wait = new WebDriverWait(driver, 10);
     }
 
     public String getMyCityText() {
-        new WebDriverWait(driver, 10, 100)
-                .until(ExpectedConditions.visibilityOf(myCity));
-
-        return myCity.getText();
+        return wait.until(ExpectedConditions.visibilityOf(myCity))
+                .getText();
     }
 }
