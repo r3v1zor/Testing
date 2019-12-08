@@ -3,14 +3,9 @@ package ru.page;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
 
-public class LoginPage {
-    private WebDriver driver;
-    private WebDriverWait wait;
-
+public class LoginPage extends AbstractPage {
     @FindBy(css = "#passp-field-login")
     private WebElement loginForm;
     @FindBy(css = "#passp-field-passwd")
@@ -19,24 +14,30 @@ public class LoginPage {
     private WebElement signInButton;
 
     public LoginPage(WebDriver driver) {
-        PageFactory.initElements(driver, this);
-        this.driver = driver;
-        wait = new WebDriverWait(driver, 10);
+        super(driver);
     }
+
 
     public MainPage login(String login, String password) {
         wait.until(ExpectedConditions.visibilityOf(loginForm))
                 .sendKeys(login);
 
-        wait.until(ExpectedConditions.elementToBeClickable(signInButton))
-                .click();
+        takeScreenShot("Вводим логин", loginForm);
+
+        wait.until(ExpectedConditions.elementToBeClickable(signInButton));
+        signInButton.click();
+
+        takeScreenShot("Нажимаем на ввод");
 
         wait.until(ExpectedConditions.visibilityOf(passwordForm))
                 .sendKeys(password);
 
+        takeScreenShot("Вводим пароль", passwordForm);
+
         wait.until(ExpectedConditions.elementToBeClickable(signInButton))
                 .click();
 
+        takeScreenShot("Нажимаем на ввод");
         return new MainPage(driver);
     }
 }

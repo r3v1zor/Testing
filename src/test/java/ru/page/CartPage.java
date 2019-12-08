@@ -4,12 +4,10 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
 
-public class CartPage {
+public class CartPage extends AbstractPage {
     @FindBy(xpath = "//span[contains(@data-tid, '365cd6d7')]")
     private WebElement untilFreeDelivery;
 
@@ -22,13 +20,8 @@ public class CartPage {
     @FindBy(xpath = "//span[contains(text(), '+')]/../..")
     private WebElement addToothbrushButton;
 
-    private WebDriver driver;
-    private WebDriverWait wait;
-
     public CartPage(WebDriver driver) {
-        PageFactory.initElements(driver, this);
-        this.driver = driver;
-        wait = new WebDriverWait(driver, 10, 500);
+        super(driver);
     }
 
     public CheckoutOrderPage checkoutOrder() {

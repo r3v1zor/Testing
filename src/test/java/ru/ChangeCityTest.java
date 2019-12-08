@@ -25,8 +25,8 @@ public class ChangeCityTest extends WebDriverSettings {
 
         String mainPageCityText = mainPage.getSpanCityText(city);
 
-        mainPage = auth(login, password);
-        mainPage.moveCursorOnProfile();
+        mainPage.auth(login, password);
+        mainPage.clickOnMyProfile();
         final SettingsPage settingsPage = mainPage.clickOnSettings();
         final String settingsPageCityText = settingsPage.getMyCityText();
 

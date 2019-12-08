@@ -3,24 +3,17 @@ package ru.page;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
 
-public class BeautyAndHygienePage {
+public class BeautyAndHygienePage extends AbstractPage {
     @FindBy(xpath = "//span[contains(text(), 'Зубные щетки')]/parent::a")
     private WebElement toothbrushes;
 
-    private WebDriver driver;
-    private WebDriverWait wait;
-
     public BeautyAndHygienePage(WebDriver driver) {
-        PageFactory.initElements(driver, this);
-        this.driver = driver;
-        wait = new WebDriverWait(driver, 10, 100);
+        super(driver);
     }
 
-    public ToothbrushesPage getToothbrushesPage() throws InterruptedException {
+    public ToothbrushesPage getToothbrushesPage() {
         wait.until(ExpectedConditions.elementToBeClickable(toothbrushes))
                 .click();
 

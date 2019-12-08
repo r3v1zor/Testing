@@ -5,14 +5,12 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.util.List;
 
-public class ToothbrushesPage {
+public class ToothbrushesPage extends AbstractPage {
     @FindBy(xpath = "//span[@data-auto = 'filter-range-min']//input")
     private WebElement priceFrom;
 
@@ -34,17 +32,11 @@ public class ToothbrushesPage {
     @FindBy(xpath = "//div[@data-zone-name = 'SearchSerp']")
     private WebElement search;
 
-    private WebDriver driver;
-    private WebDriverWait wait;
-
-    public ToothbrushesPage(WebDriver driver) throws InterruptedException {
-        PageFactory.initElements(driver, this);
-        this.driver = driver;
-        wait = new WebDriverWait(driver, 10);
+    public ToothbrushesPage(WebDriver driver) {
+        super(driver);
     }
 
     public void setFilter(Integer prFrom, Integer prTo) {
-
         wait.until(ExpectedConditions.visibilityOf(priceFrom))
                 .sendKeys(prFrom.toString());
 
@@ -52,7 +44,7 @@ public class ToothbrushesPage {
                 .sendKeys(prTo.toString());
 
         wait.until((ExpectedCondition<Boolean>) driver ->
-                search.getAttribute("data-zone-data").contains(Integer.toString(24)));
+                search.getAttribute("data-zone-data").contains(Integer.toString(23)));
     }
 
     public void checkToothBrushes(Integer prFrom, Integer prTo) {

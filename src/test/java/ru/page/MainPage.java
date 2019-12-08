@@ -1,19 +1,15 @@
 package ru.page;
 
+import org.junit.Assert;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
 
-public class MainPage {
-    private WebDriver driver;
-    private WebDriverWait wait;
-
+public class MainPage extends AbstractPage {
     @FindBy(css = ".pFhTbV17qj")
     private WebElement signInButton;
 
@@ -21,7 +17,7 @@ public class MainPage {
     private WebElement menu;
 
     @FindBy(css = "._2SFylIV5m5 > div:nth-child(2) > span:nth-child(1)")
-    private WebElement loginSpan;
+    private WebElement login;
 
     @FindBy(css = ".EsYwYP7LNa > span:nth-child(1) > span:nth-child(2)")
     private WebElement citySpan;
@@ -49,13 +45,8 @@ public class MainPage {
 
     private int index = 0;
 
-    public MainPage() {
-    }
-
     public MainPage(WebDriver driver) {
-        PageFactory.initElements(driver, this);
-        this.driver = driver;
-        wait = new WebDriverWait(driver, 10, 100);
+        super(driver);
     }
 
 
@@ -77,10 +68,9 @@ public class MainPage {
                 .click();
     }
 
-    public boolean isLoginVisible() {
-        wait.until(ExpectedConditions.visibilityOf(loginSpan));
-
-        return loginSpan.isDisplayed();
+    public void isLoginVisible() {
+        wait.until(ExpectedConditions.visibilityOf(login));
+        Assert.assertTrue(login.isDisplayed());
     }
 
     public SettingsPage clickOnSettings() {
@@ -130,5 +120,9 @@ public class MainPage {
         wait.until(ExpectedConditions.textToBePresentInElement(citySpan, city));
 
         return citySpan.getText();
+    }
+
+    public void isSignInButtonChangeOnMyProfile() {
+        Assert.assertEquals(getSignInButtonText(), "Мой профиль");
     }
 }
