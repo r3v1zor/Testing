@@ -22,14 +22,10 @@ public class ChangeCityTest extends WebDriverSettings {
     public void changeCity(String city) {
         MainPage mainPage = new MainPage(driver);
         mainPage.changeCity(city);
-
         String mainPageCityText = mainPage.getSpanCityText(city);
-
         mainPage.auth(login, password);
         mainPage.clickOnMyProfile();
-        final SettingsPage settingsPage = mainPage.clickOnSettings();
-        final String settingsPageCityText = settingsPage.getMyCityText();
-
-        Assert.assertEquals(mainPageCityText, settingsPageCityText);
+        SettingsPage settingsPage = mainPage.clickOnSettings();
+        settingsPage.checkEqualityWithMainPageCity(mainPageCityText);
     }
 }

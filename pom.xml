@@ -67,7 +67,7 @@
                     </argLine>
                     <properties>
                         <property>
-                            <name>EventHandler</name>
+                            <name>listener</name>
                             <value>io.qameta.allure.junit4.AllureJunit4</value>
                         </property>
                     </properties>

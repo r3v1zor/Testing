@@ -1,6 +1,7 @@
 package ru.handler;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.events.WebDriverEventListener;
@@ -79,22 +80,24 @@ public class EventHandler implements WebDriverEventListener {
 
     @Override
     public void beforeClickOn(WebElement webElement, WebDriver webDriver) {
-
+        JavascriptExecutor js = (JavascriptExecutor) webDriver;
+        js.executeScript("arguments[0].style.backgroundColor = '#c3c327'", webElement);
     }
 
     @Override
     public void afterClickOn(WebElement webElement, WebDriver webDriver) {
-        ScreenshotUtils.takesScreenshot("screenShot", webDriver, webElement);
+        ScreenshotUtils.takesScreenshot("After click", webDriver, webElement);
     }
 
     @Override
     public void beforeChangeValueOf(WebElement webElement, WebDriver webDriver, CharSequence[] charSequences) {
-
+        JavascriptExecutor js = (JavascriptExecutor) webDriver;
+        js.executeScript("arguments[0].style.backgroundColor = '#c3c327'", webElement);
     }
 
     @Override
     public void afterChangeValueOf(WebElement webElement, WebDriver webDriver, CharSequence[] charSequences) {
-
+        ScreenshotUtils.takesScreenshot("input", webDriver);
     }
 
     @Override

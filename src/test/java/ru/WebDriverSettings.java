@@ -1,11 +1,13 @@
 package ru;
 
-import io.qameta.allure.Attachment;
 import org.junit.Rule;
 import org.junit.rules.TestWatcher;
 import org.junit.runner.Description;
-import org.openqa.selenium.*;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.support.events.EventFiringWebDriver;
+import ru.handler.EventHandler;
+import util.ScreenshotUtils;
 
 import java.io.FileReader;
 import java.io.IOException;
@@ -13,7 +15,7 @@ import java.util.Properties;
 import java.util.concurrent.TimeUnit;
 
 public class WebDriverSettings {
-    protected static WebDriver driver;
+    protected static EventFiringWebDriver driver;
     protected String login;
     protected String password;
 
@@ -23,7 +25,7 @@ public class WebDriverSettings {
         protected void starting(Description description) {
             Properties properties = new Properties();
 
-            try (FileReader fileReader = new FileReader("/media/r3v1zor/C163-19C5/Testing/src/main/resources/account.properties")) {
+            try (FileReader fileReader = new FileReader("C:\\Users\\Vladislav\\IdeaProjects\\Testing\\src\\main\\resources\\account.properties")) {
                 properties.load(fileReader);
             } catch (IOException exp) {
                 exp.printStackTrace();
@@ -31,9 +33,14 @@ public class WebDriverSettings {
             login = properties.getProperty("login");
             password = properties.getProperty("password");
 
-            System.setProperty("webdriver.chrome.driver", "/home/r3v1zor/apps/chromedriver");
-            driver = new ChromeDriver();
-            //driver.manage().window().fullscreen();
+            System.setProperty("webdriver.chrome.driver", "C:\\Users\\Vladislav\\IdeaProjects\\Testing\\chromedriver.exe");
+
+            WebDriver webdriver = new ChromeDriver();
+            driver = new EventFiringWebDriver(webdriver);
+
+            EventHandler handler = new EventHandler();
+            driver.register(handler);
+            driver.manage().window().maximize();
             driver.get("https://beru.ru");
 
             driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
@@ -41,7 +48,7 @@ public class WebDriverSettings {
 
         @Override
         protected void failed(Throwable e, Description description) {
-            takeScreenShot();
+            ScreenshotUtils.takesScreenshot("failed", driver);
         }
 
         @Override
@@ -49,17 +56,4 @@ public class WebDriverSettings {
             driver.close();
         }
     };
-
-    @Attachment(value = "Снимок ''{0}''", type = "image/png")
-    public static byte[] takeScreenShot() {
-        return ((TakesScreenshot) driver).getScreenshotAs(OutputType.BYTES);
-    }
-
-    @Attachment(value = "Снимок ''{0}''", type = "image/png")
-    public static byte[] takeScreenShot(WebElement element) {
-        JavascriptExecutor js = (JavascriptExecutor) driver;
-        js.executeScript("arguments[0].setAttribute('font', 'yellow')", element);
-
-        return ((TakesScreenshot) driver).getScreenshotAs(OutputType.BYTES);
-    }
 }
