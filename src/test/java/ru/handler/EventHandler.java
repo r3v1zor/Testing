@@ -86,7 +86,7 @@ public class EventHandler implements WebDriverEventListener {
 
     @Override
     public void afterClickOn(WebElement webElement, WebDriver webDriver) {
-        ScreenshotUtils.takesScreenshot("After click", webDriver, webElement);
+        ScreenshotUtils.takesScreenshot("After click", webDriver);
     }
 
     @Override

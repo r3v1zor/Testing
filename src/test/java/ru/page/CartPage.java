@@ -9,11 +9,13 @@ import org.openqa.selenium.support.events.EventFiringWebDriver;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
+import javax.annotation.Nullable;
+
 public class CartPage extends AbstractPage {
     @FindBy(xpath = "//span[contains(@data-tid, '365cd6d7')]")
     private WebElement untilFreeDelivery;
 
-    @FindBy(xpath = "//div[contains(@data-tid, '95256ff1')]//button")
+    @FindBy(xpath = "(//span[contains(text(), 'Перейти')])/..")
     private WebElement checkoutOrder;
 
     @FindBy(xpath = "//div[contains(@data-auto, 'total-items')]")
@@ -22,17 +24,18 @@ public class CartPage extends AbstractPage {
     @FindBy(xpath = "//span[contains(text(), '+')]/../..")
     private WebElement addToothbrushButton;
 
+    @FindBy(xpath = "//div[@data-apiary-widget-name='@marketplace/CartTotalPrice']")
+    private WebElement cartTotalPrice;
+
     public CartPage(EventFiringWebDriver driver) {
         super(driver);
     }
 
     @Step(value = "Переходим к оформлению заказа")
-    public CheckoutOrderPage checkoutOrder() {
-        wait.until(ExpectedConditions.or(ExpectedConditions.elementToBeClickable(checkoutOrder),
-                ExpectedConditions.elementToBeClickable(checkoutOrder)));
-
+    public CheckoutOrderPage goToCheckoutOrder() {
+        wait.until((ExpectedCondition<Boolean>) webDriver -> cartTotalPrice.isEnabled());
+        wait.until(ExpectedConditions.elementToBeClickable(checkoutOrder));
         checkoutOrder.click();
-
         return new CheckoutOrderPage(driver);
     }
 

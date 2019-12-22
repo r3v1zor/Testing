@@ -3,8 +3,6 @@ package ru.page;
 import io.qameta.allure.Step;
 import org.junit.Assert;
 import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.events.EventFiringWebDriver;
@@ -25,6 +23,9 @@ public class ToothbrushesPage extends AbstractPage {
 
     @FindBy(css = ".preloadable__preloader.preloadable__preloader_visibility_visible.preloadable__paranja")
     private WebElement loadCurtain;
+
+    @FindBy(xpath = "//button[@data-auto='executed-cart-button']")
+    private WebElement toCartButton;
 
     @FindBy(css = ".n-pager")
     private WebElement searchStat;
@@ -55,7 +56,7 @@ public class ToothbrushesPage extends AbstractPage {
     @Step(value = "Ожидаем пока загрузится список щеток текущей цены")
     private void waitUntilRefresh() {
         wait.until((ExpectedCondition<Boolean>) driver ->
-                search.getAttribute("data-zone-data").contains(Integer.toString(22)));
+                search.getAttribute("data-zone-data").contains(Integer.toString(25)));
     }
 
     @Step(value = "Устанавливаем значение конечной цены")
@@ -76,21 +77,15 @@ public class ToothbrushesPage extends AbstractPage {
     @Step(value = "Выбираем предпоследнюю щетку из каталога")
     public void chooseToothBrush() {
         driver.executeScript("scrollTo(0, document.body.scrollHeight / 2)");
-        WebElement toothbrush = listOfToothBrushes.get(12);//listOfToothBrushes.size() - 2);
+        WebElement toothbrush = listOfToothBrushes.get(listOfToothBrushes.size() - 3);
         WebElement button = toothbrush.findElement(By.xpath(".//button"));
         button.click();
-
-        wait.until(ExpectedConditions.stalenessOf(button));
-
-        wait.until((ExpectedCondition<Boolean>) driver ->
-                toothbrush.getAttribute("innerHTML").contains("В корзине"));
     }
 
     @Step(value = "Переходим в корзину")
     public CartPage goToCart() {
-        wait.until(ExpectedConditions.elementToBeClickable(cart))
+        wait.until(ExpectedConditions.elementToBeClickable(toCartButton))
                 .click();
-
         return new CartPage(driver);
     }
 }

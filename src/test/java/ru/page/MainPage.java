@@ -13,14 +13,16 @@ import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import util.ScreenshotUtils;
 
+import javax.annotation.Nullable;
+
 public class MainPage extends AbstractPage {
-    @FindBy(css = "._3odNv2Dw2n")
+    @FindBy(css = "._1FEpprw_Km")
     private WebElement menu;
 
     @FindBy(css = "._2SFylIV5m5 > div:nth-child(2) > span:nth-child(1)")
     private WebElement login;
 
-    @FindBy(css = ".EsYwYP7LNa > span:nth-child(1) > span:nth-child(2)")
+    @FindBy(xpath = "//span[@data-auto = 'region-form-opener']")
     private WebElement citySpan;
 
     @FindBy(css = "._2_45qYuGVN ._2JDvXzYsUI")
@@ -32,7 +34,7 @@ public class MainPage extends AbstractPage {
     @FindBy(css = "div.A6Py--JRNc:nth-child(2) > button:nth-child(1)")
     private WebElement acceptButton;
 
-    @FindBy(css = "ul.T3jKK6NbAR:nth-child(4) > ul:nth-child(1) > li:nth-child(3) > a:nth-child(1)")
+    @FindBy(xpath = "//a[@href='/my/settings?track=menu']")
     private WebElement settingsButton;
 
     @FindBy(css = "._301_b-LBxR button")
@@ -69,7 +71,7 @@ public class MainPage extends AbstractPage {
         wait.until(ExpectedConditions.visibilityOf(login));
         JavascriptExecutor js = driver;
         js.executeScript("arguments[0].style.backgroundColor = '#c3c327'", login);
-        ScreenshotUtils.takesScreenshot("login", driver, login);
+        ScreenshotUtils.takesScreenshot("login", driver);
         Assert.assertTrue(login.isDisplayed());
     }
 
@@ -82,10 +84,12 @@ public class MainPage extends AbstractPage {
     }
 
     public void moveCursorOnProfile() {
-        wait.until(ExpectedConditions.and(ExpectedConditions.elementToBeClickable(signInButton),
-                ExpectedConditions.visibilityOf(signInButton)));
-        new Actions(driver).moveToElement(menu).perform();
-        signInButton.click();
+        wait.until(ExpectedConditions.visibilityOf(myProfileButton));
+        wait.until((ExpectedCondition<Boolean>) webDriver -> {
+            new Actions(driver).moveToElement(menu).build().perform();
+            return settingsButton.isDisplayed();
+        });
+
     }
 
     @Step(value = "Меняем город на '{city}'")
@@ -144,7 +148,7 @@ public class MainPage extends AbstractPage {
         wait.until(ExpectedConditions.textToBePresentInElement(citySpan, city));
         JavascriptExecutor js = driver;
         js.executeScript("arguments[0].style.backgroundColor = '#c3c327'", signInButton);
-        ScreenshotUtils.takesScreenshot("city", driver, citySpan);
+        ScreenshotUtils.takesScreenshot("city", driver);
         return citySpan.getText();
     }
 
@@ -152,7 +156,7 @@ public class MainPage extends AbstractPage {
     public void isSignInButtonChangeOnMyProfile() {
         JavascriptExecutor js = driver;
         js.executeScript("arguments[0].style.backgroundColor = '#c3c327'", signInButton);
-        ScreenshotUtils.takesScreenshot("My Profile", driver, signInButton);
+        ScreenshotUtils.takesScreenshot("My Profile", driver);
         Assert.assertEquals(getSignInButtonText(), "Мой профиль");
     }
 }

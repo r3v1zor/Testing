@@ -9,15 +9,18 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class AbstractPage {
-    @FindBy(css = ".pFhTbV17qj")
+    @FindBy(xpath = "//a[contains(@href, '/login')]")
     protected WebElement signInButton;
+
+    @FindBy(xpath = "button._1FEpprw_Km")
+    protected WebElement myProfileButton;
 
     protected EventFiringWebDriver driver;
     protected WebDriverWait wait;
 
     public AbstractPage(EventFiringWebDriver driver) {
         this.driver = driver;
-        wait = new WebDriverWait(driver, 10, 100);
+        wait = new WebDriverWait(driver, 30, 100);
         PageFactory.initElements(driver, this);
     }
 

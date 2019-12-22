@@ -24,7 +24,7 @@ public class ChangeCityTest extends WebDriverSettings {
         mainPage.changeCity(city);
         String mainPageCityText = mainPage.getSpanCityText(city);
         mainPage.auth(login, password);
-        mainPage.clickOnMyProfile();
+        mainPage.moveCursorOnProfile();
         SettingsPage settingsPage = mainPage.clickOnSettings();
         settingsPage.checkEqualityWithMainPageCity(mainPageCityText);
     }

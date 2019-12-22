@@ -8,7 +8,7 @@ import org.openqa.selenium.support.events.EventFiringWebDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
 public class BeautyAndHygienePage extends AbstractPage {
-    @FindBy(xpath = "//span[contains(text(), 'Зубные щетки')]/parent::a")
+    @FindBy(xpath = "//span[contains(text(), 'Электрические зубные щетки')]/parent::a")
     private WebElement toothbrushes;
 
     public BeautyAndHygienePage(EventFiringWebDriver driver) {

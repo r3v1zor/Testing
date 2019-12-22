@@ -22,7 +22,7 @@ public class SettingsPage extends AbstractPage {
     public String getMyCityText() {
         JavascriptExecutor js = driver;
         js.executeScript("arguments[0].style.backgroundColor = '#c3c327'", myCity);
-        ScreenshotUtils.takesScreenshot("city", driver, myCity);
+        ScreenshotUtils.takesScreenshot("city", driver);
         return wait.until(ExpectedConditions.visibilityOf(myCity))
                 .getText();
     }

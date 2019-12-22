@@ -1,17 +1,9 @@
 package ru;
 
-import com.tngtech.java.junit.dataprovider.DataProvider;
-import org.junit.Assert;
 import org.junit.Test;
 import ru.page.*;
 
 public class ToothbrushTest extends WebDriverSettings {
-    @DataProvider
-    public static Object[][] dataProviderPrices() {
-        return new Object[][]{{999, 1999}, {888, 1888}};
-    }
-
-
     @Test
     public void test() {
         MainPage mainPage = new MainPage(driver);
@@ -26,13 +18,13 @@ public class ToothbrushTest extends WebDriverSettings {
 
         CartPage cartPage = toothbrushesPage.goToCart();
 
-        CheckoutOrderPage checkoutOrderPage = cartPage.checkoutOrder();
+        CheckoutOrderPage checkoutOrderPage = cartPage.goToCheckoutOrder();
         checkoutOrderPage.checkPrice();
 
         cartPage = checkoutOrderPage.backToCart();
         cartPage.addToothBrushes(2999);
 
-        checkoutOrderPage = cartPage.checkoutOrder();
+        checkoutOrderPage = cartPage.goToCheckoutOrder();
         checkoutOrderPage.checkPrice();
     }
 }

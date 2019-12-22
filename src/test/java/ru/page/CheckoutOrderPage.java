@@ -10,6 +10,8 @@ import org.openqa.selenium.support.FindBys;
 import org.openqa.selenium.support.events.EventFiringWebDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
+import java.util.regex.Pattern;
+
 public class CheckoutOrderPage extends AbstractPage {
     @FindBy(xpath = "//div[contains(@data-auto, 'DELIVERY')]")
     private WebElement expressDelivery;
@@ -58,13 +60,14 @@ public class CheckoutOrderPage extends AbstractPage {
             buff = discount.findElement(By.xpath(".//span[@data-tid='52906e8d']"))
                     .getText();
 
-            totalDiscount -= priceToInt(buff);
+            totalDiscount += priceToInt(buff.substring(1));
         }
 
         buff = totalDelivery.findElement(By.xpath("(.//span[@data-auto = 'value'])")).getText();
         int totalDeliveryPrice = buff.matches("[\\d\\s]+.") ? priceToInt(buff) : 0;
 
         buff = totalPrice.findElement(By.className("_1oBlNqVHPq")).getText();
+        System.out.println(buff);
         int summaryPrice = priceToInt(buff);
 
         Assert.assertEquals(totalItemsPrice - totalDiscount + totalDeliveryPrice, summaryPrice);
